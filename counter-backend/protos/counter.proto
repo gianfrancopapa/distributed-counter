@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service CounterService {
+    rpc getCounter(CounterRequest) returns (stream Counter);
+    rpc incrementCounter(Counter) returns (Counter);
+}
+
+message CounterRequest {
+    string id = 1;
+}
+
+message Counter {
+    double value = 1;
+}
