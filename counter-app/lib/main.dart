@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:counter_backend/counter_backend.dart';
 
 void main() {
-  runApp(const MyApp());
+  const portValue = String.fromEnvironment('PORT');
+  final port = int.parse(portValue);
+
+  runApp(
+    MyApp(
+      port: port,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({
+    super.key,
+    required this.port,
+  });
+
+  final int port;
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +27,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        port: port,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({
+    super.key,
+    required this.title,
+    required this.port,
+  });
 
   final String title;
+  final int port;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -40,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     channel = ClientChannel(
       'localhost',
-      port: 8080,
+      port: widget.port,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),
       ),
@@ -76,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              '${widget.port.toString()} You have pushed the button this many times:',
             ),
             Text(
               '$_counter',
